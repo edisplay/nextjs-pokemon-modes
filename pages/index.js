@@ -4,7 +4,21 @@ import Head from "next/head";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
-export default function Home() {
+// Server-side rendering
+export async function getServerSideProps() {
+    const resp = await fetch(
+        "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+    );
+  return {
+    props: {
+        pokemon: await resp.json(),
+    },
+  };
+}
+
+// export default function Home() { // Client-side rendering
+export default function Home({pokemon}) { // Server-side rendering
+    /* // Client-side rendering
     const [pokemon, setPokemon] = useState([]);
 
     useEffect(() => {
@@ -15,7 +29,7 @@ export default function Home() {
             setPokemon(await resp.json());
         }
         getPokemon();
-    }, []);
+    }, []); */
 
     return (
         <div className={styles.container}>

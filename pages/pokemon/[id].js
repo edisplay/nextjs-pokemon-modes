@@ -1,11 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
+/* // Client-side rendering
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; 
+*/
+import React from "react"; // Server-side rendering
 import Head from "next/head";
 import Link from "next/link";
 import styles from "../../styles/Details.module.css";
 
-export default function Details() {
+// Server-side rendering
+export async function getServerSideProps({ params }) {
+    const resp = await fetch(
+        `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
+    );
+    return {
+        props: {
+            pokemon: await resp.json(),
+        },
+    };
+}
+
+export default function Details({ pokemon }) {
+    /* // Client-side rendering
     const {
         query: { id },
     } = useRouter();
@@ -28,6 +44,7 @@ export default function Details() {
     if (!pokemon) {
         return null;
     }
+    */
 
     return (
         <div>
