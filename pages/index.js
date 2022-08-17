@@ -5,7 +5,8 @@ import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
 // Server-side rendering
-export async function getServerSideProps() {
+// export async function getServerSideProps() { // Server side rendering
+export async function getStaticProps() { // Change to Static Site Generation (SSG)
     const resp = await fetch(
         "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
     );

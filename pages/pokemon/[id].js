@@ -8,8 +8,23 @@ import Head from "next/head";
 import Link from "next/link";
 import styles from "../../styles/Details.module.css";
 
+// Static Site Generation (SSG) - Know what all the routes are
+export async function getStaticPaths() {
+    const resp = await fetch(
+        "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+    );
+    const pokemon = await resp.json();
+    return {
+        paths: pokemon.map((pokemon) => ({
+            params: { id: pokemon.id.toString() },
+        })),
+        fallback: false,
+    }
+}
+
 // Server-side rendering
-export async function getServerSideProps({ params }) {
+// export async function getServerSideProps({ params }) { // Server side rendering
+export async function getStaticProps({ params }) { // Change to Static Site Generation (SSG)
     const resp = await fetch(
         `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
     );
