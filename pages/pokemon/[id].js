@@ -32,7 +32,7 @@ export async function getStaticProps({ params }) { // Change to Static Site Gene
         props: {
             pokemon: await resp.json(),
         },
-        revalidate : 30, // add fresh dynamic data every 30 seconds
+        // revalidate : 30, // add fresh dynamic data every 30 seconds
     };
 }
 
