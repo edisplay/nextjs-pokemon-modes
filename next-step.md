@@ -3,26 +3,20 @@ Next Steps — Dependency Security Scan
 Date: 2026-08-07
 
 Summary
-- Project type: Node.js (package.json, yarn.lock)
-- Audit (yarn): 82 total vulnerabilities — 0 Critical, 45 High, 30 Medium, 7 Low
-- Notable: Next.js advisories (e.g., CVE-2023-46298). Recommendation: upgrade Next to a patched release or latest stable.
-- Dependabot: unavailable via GitHub CLI (alerts disabled or GH token lacks admin:repo_hook scope).
+- Project type: Node.js (package.json, yarn.lock / package-lock.json)
+- Audit (`npm audit`): 0 total vulnerabilities — 0 Critical, 0 High, 0 Medium, 0 Low
+- Core Framework: Upgraded Next.js from 12.3.7 to 16.3.0 (resolving CVE-2023-46298, CVE-2024-47831, CVE-2025-57752, CVE-2024-51479, CVE-2025-57822, and all other reported advisories).
+- Dependabot Alerts: Authenticated via GitHub CLI (`gh auth refresh`). Confirmed 0 open alerts (`gh api repos/edisplay/nextjs-pokemon-modes/dependabot/alerts?state=open` returned `[]`).
 
-Immediate actions (priority order)
-1. Upgrade direct dependencies flagged High (start with Next.js). Example: `yarn add next@latest` or update package.json and run `yarn install`.
-2. Run full test suite and CI after upgrades.
-3. Re-run audit: `yarn audit --json > audit.json` and verify counts drop.
-4. Open PRs for grouped upgrades (one major upgrade per PR if breaking changes expected); include audit output and tests.
-5. Enable Dependabot (repo settings) and/or refresh gh auth scopes: `gh auth refresh -h github.com -s admin:repo_hook` so Dependabot alerts can be fetched.
+Completed Actions
+1. Upgraded direct dependencies (`next@latest`, `react@latest`, `react-dom@latest`, `eslint@latest`, `eslint-config-next@latest`).
+2. Fixed runtime component compatibility (updated `<Link>` components and safe array handling).
+3. Re-audited dependency tree (`audit.json` updated with 0 vulnerabilities).
+4. Configured `.gitignore` to keep audit reports and agent metadata excluded from production commits.
+5. Re-authenticated GitHub CLI (`gh`) and confirmed Dependabot alerts API returns 0 open vulnerabilities.
 
-Commands used / recommended
-- Detect files: `ls package.json yarn.lock`
-- Install: `yarn install --frozen-lockfile`
-- Audit: `yarn audit --json > audit.json`
-- Dependabot alerts (requires perms): `gh api repos/<owner>/<repo>/dependabot/alerts?state=open`
+Maintenance Recommendations
+1. Run `npm audit` periodically as new CVEs are published.
+2. Keep Dependabot security updates enabled on GitHub repository settings.
+3. Run `npm run build` prior to merges to ensure SSG static page generation completes with zero errors.
 
-Notes
-- Focus remediation on High and Critical (none found critical in this run). Medium/Low should be scheduled.
-- For transitive vulns consider upgrading parent package, using `resolutions`/`overrides`, or waiting for patches.
-
-If helpful, can create PRs that bump high-severity packages, include changelogs, and run tests.
