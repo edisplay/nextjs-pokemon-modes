@@ -33,6 +33,7 @@ export async function getStaticProps({ params }) { // Change to Static Site Gene
 }
 
 export default function Details({ pokemon }) {
+    if (!pokemon) return null;
     return (
        <div>
            <Head>
@@ -40,8 +41,8 @@ export default function Details({ pokemon }) {
                <meta name="description" content={`Learn about ${pokemon.name}`} />
                <meta name="viewport" content="width=device-width, initial-scale=1" />
            </Head>
-           <Link href="/">
-               <a className={styles.backButton}>← Back to Explorer</a>
+           <Link href="/" className={styles.backButton}>
+               ← Back to Explorer
            </Link>
            <div className={styles.layout}>
                <div className={styles.imageContainer}>
@@ -56,7 +57,7 @@ export default function Details({ pokemon }) {
                    <div className={styles.header}>
                        <h1 className={styles.name}>{pokemon.name}</h1>
                        <div className={styles.type}>
-                           {pokemon.type.map((t) => (
+                           {Array.isArray(pokemon.type) && pokemon.type.map((t) => (
                                <span key={t} className={styles.typeTag}>{t}</span>
                            ))}
                        </div>
@@ -64,7 +65,7 @@ export default function Details({ pokemon }) {
                    <div className={styles.statsSection}>
                        <h2 className={styles.statsTitle}>Base Stats</h2>
                        <div className={styles.statsList}>
-                           {pokemon.stats.map(({ name, value }) => (
+                           {Array.isArray(pokemon.stats) && pokemon.stats.map(({ name, value }) => (
                                <div key={name} className={styles.statItem}>
                                    <div className={styles.statName}>{name}</div>
                                    <div className={styles.statValue}>{value}</div>

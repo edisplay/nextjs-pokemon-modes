@@ -17,13 +17,14 @@ export async function getStaticProps() { // Change to Static Site Generation (SS
 }
 
 // export default function Home() { // Client-side rendering
-export default function Home({pokemon}) { // Server-side rendering
+export default function Home({ pokemon = [] }) { // Server-side rendering
     const [searchTerm, setSearchTerm] = useState("");
 
     const filteredPokemon = useMemo(() => {
+        if (!Array.isArray(pokemon)) return [];
         return pokemon.filter((p) =>
-            p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            p.type.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()))
+            (p.name && p.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (Array.isArray(p.type) && p.type.some(t => t.toLowerCase().includes(searchTerm.toLowerCase())))
         );
     }, [pokemon, searchTerm]);
 
@@ -60,14 +61,12 @@ export default function Home({pokemon}) { // Server-side rendering
                     {filteredPokemon.map((pokemon) => (
                         <div className={styles.card} key={pokemon.id}>
                             <Link href={`/pokemon/${pokemon.id}`}>
-                                <a>
-                                    <img
-                                        src={`https://raw.githubusercontent.com/edisplay/pokemon/main/${pokemon.image}`}
-                                        alt={pokemon.name}
-                                        loading="lazy"
-                                    />
-                                    <h3>{pokemon.name}</h3>
-                                </a>
+                                <img
+                                    src={`https://raw.githubusercontent.com/edisplay/pokemon/main/${pokemon.image}`}
+                                    alt={pokemon.name}
+                                    loading="lazy"
+                                />
+                                <h3>{pokemon.name}</h3>
                             </Link>
                         </div>
                     ))}
