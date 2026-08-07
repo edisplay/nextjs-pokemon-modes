@@ -37,7 +37,7 @@ export default function Details({ pokemon }) {
     return (
        <div>
            <Head>
-               <title>{pokemon.name} - Pokemon Explorer</title>
+               <title>{`${pokemon.name} - Pokemon Explorer`}</title>
                <meta name="description" content={`Learn about ${pokemon.name}`} />
                <meta name="viewport" content="width=device-width, initial-scale=1" />
            </Head>
