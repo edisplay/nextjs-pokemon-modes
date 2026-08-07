@@ -8,7 +8,7 @@ import styles from "../styles/Home.module.css";
 // export async function getServerSideProps() { // Server side rendering
 export async function getStaticProps() { // Change to Static Site Generation (SSG)
     const resp = await fetch(
-        "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+        "https://raw.githubusercontent.com/edisplay/pokemon/main/index.json"
     );
   return {
     props: {
@@ -25,7 +25,7 @@ export default function Home({pokemon}) { // Server-side rendering
     useEffect(() => {
         async function getPokemon() {
             const resp = await fetch(
-                "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+                "https://raw.githubusercontent.com/edisplay/pokemon/main/index.json"
             );
             setPokemon(await resp.json());
         }
@@ -44,7 +44,7 @@ export default function Home({pokemon}) { // Server-side rendering
                         <Link href={`/pokemon/${pokemon.id}`}>
                             <a>
                                 <img
-                                    src={`https://jherr-pokemon.s3.us-west-1.amazonaws.com/${pokemon.image}`}
+                                    src={`https://raw.githubusercontent.com/edisplay/pokemon/main/${pokemon.image}`}
                                     alt={pokemon.name}
                                 />
                                 <h3>{pokemon.name}</h3>
