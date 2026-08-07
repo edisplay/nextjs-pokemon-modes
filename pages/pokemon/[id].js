@@ -11,7 +11,7 @@ import styles from "../../styles/Details.module.css";
 // Static Site Generation (SSG) - Know what all the routes are
 export async function getStaticPaths() {
     const resp = await fetch(
-        "https://jherr-pokemon.s3.us-west-1.amazonaws.com/index.json"
+        "https://raw.githubusercontent.com/edisplay/pokemon/main/index.json"
     );
     const pokemon = await resp.json();
     return {
@@ -26,7 +26,7 @@ export async function getStaticPaths() {
 // export async function getServerSideProps({ params }) { // Server side rendering
 export async function getStaticProps({ params }) { // Change to Static Site Generation (SSG)
     const resp = await fetch(
-        `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${params.id}.json`
+        `https://raw.githubusercontent.com/edisplay/pokemon/main/pokemon/${params.id}.json`
     );
     return {
         props: {
@@ -47,7 +47,7 @@ export default function Details({ pokemon }) {
     useEffect(() => {
         async function getPokemon() {
             const resp = await fetch(
-                `https://jherr-pokemon.s3.us-west-1.amazonaws.com/pokemon/${id}.json`
+                `https://raw.githubusercontent.com/edisplay/pokemon/main/pokemon/${id}.json`
             );
             setPokemon(await resp.json());
         }
@@ -74,7 +74,7 @@ export default function Details({ pokemon }) {
                 <div>
                     <img
                         className={styles.picture}
-                        src={`https://jherr-pokemon.s3.us-west-1.amazonaws.com/${pokemon.image}`}
+                        src={`https://raw.githubusercontent.com/edisplay/pokemon/main/${pokemon.image}`}
                         alt={pokemon.name.english}
                     />
                 </div>
