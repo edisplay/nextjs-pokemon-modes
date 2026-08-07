@@ -42,3 +42,7 @@ AGENTS.md
 CLAUDE.md
 .turbo
 
+# Security Audit
+audit.json
+dependabot_raw.json
+next-step.md
