@@ -1,9 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-/* // Client-side rendering
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react"; 
-*/
-import React from "react"; // Server-side rendering
+import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import styles from "../../styles/Details.module.css";
@@ -11,14 +7,14 @@ import styles from "../../styles/Details.module.css";
 // Static Site Generation (SSG) - Know what all the routes are
 export async function getStaticPaths() {
     const resp = await fetch(
-        "https://raw.githubusercontent.com/edisplay/pokemon/main/index.json"
+       "https://raw.githubusercontent.com/edisplay/pokemon/main/index.json"
     );
     const pokemon = await resp.json();
     return {
-        paths: pokemon.map((pokemon) => ({
-            params: { id: pokemon.id.toString() },
-        })),
-        fallback: false,
+       paths: pokemon.map((pokemon) => ({
+           params: { id: pokemon.id.toString() },
+       })),
+       fallback: false,
     }
 }
 
@@ -26,80 +22,64 @@ export async function getStaticPaths() {
 // export async function getServerSideProps({ params }) { // Server side rendering
 export async function getStaticProps({ params }) { // Change to Static Site Generation (SSG)
     const resp = await fetch(
-        `https://raw.githubusercontent.com/edisplay/pokemon/main/pokemon/${params.id}.json`
+       `https://raw.githubusercontent.com/edisplay/pokemon/main/pokemon/${params.id}.json`
     );
     return {
-        props: {
-            pokemon: await resp.json(),
-        },
-        // revalidate : 30, // add fresh dynamic data every 30 seconds
+       props: {
+           pokemon: await resp.json(),
+       },
+       // revalidate : 30, // add fresh dynamic data every 30 seconds
     };
 }
 
 export default function Details({ pokemon }) {
-    /* // Client-side rendering
-    const {
-        query: { id },
-    } = useRouter();
-
-    const [pokemon, setPokemon] = useState(null); // null - an object not an array []
-
-    useEffect(() => {
-        async function getPokemon() {
-            const resp = await fetch(
-                `https://raw.githubusercontent.com/edisplay/pokemon/main/pokemon/${id}.json`
-            );
-            setPokemon(await resp.json());
-        }
-
-        if (id) {
-            getPokemon();
-        }
-    }, [id]);
-
-    if (!pokemon) {
-        return null;
-    }
-    */
-
     return (
-        <div>
-            <Head>
-                <title>{pokemon.name}</title>
-            </Head>
-            <Link href="/">
-                <a>Back to Home</a>
-            </Link>
-            <div className={styles.layout}>
-                <div>
-                    <img
-                        className={styles.picture}
-                        src={`https://raw.githubusercontent.com/edisplay/pokemon/main/${pokemon.image}`}
-                        alt={pokemon.name.english}
-                    />
-                </div>
-                <div>
-                    <div className={styles.name}>{pokemon.name}</div>
-                    <div className={styles.type}>{pokemon.type.join(", ")}</div>
-                    <table>
-                        <thead className={styles.header}>
-                            <tr>
-                                <th>Name</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {pokemon.stats.map(({ name, value }) => (
-                                <tr key={name}>
-                                    <td className={styles.attribute}>{name}</td>
-                                    <td>{value}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            {/* <div>{JSON.stringify(pokemon)}</div> */}
-        </div>
+       <div>
+           <Head>
+               <title>{pokemon.name} - Pokemon Explorer</title>
+               <meta name="description" content={`Learn about ${pokemon.name}`} />
+               <meta name="viewport" content="width=device-width, initial-scale=1" />
+           </Head>
+           <Link href="/">
+               <a className={styles.backButton}>← Back to Explorer</a>
+           </Link>
+           <div className={styles.layout}>
+               <div className={styles.imageContainer}>
+                   <img
+                       className={styles.picture}
+                       src={`https://raw.githubusercontent.com/edisplay/pokemon/main/${pokemon.image}`}
+                       alt={pokemon.name}
+                       loading="lazy"
+                   />
+               </div>
+               <div className={styles.info}>
+                   <div className={styles.header}>
+                       <h1 className={styles.name}>{pokemon.name}</h1>
+                       <div className={styles.type}>
+                           {pokemon.type.map((t) => (
+                               <span key={t} className={styles.typeTag}>{t}</span>
+                           ))}
+                       </div>
+                   </div>
+                   <div className={styles.statsSection}>
+                       <h2 className={styles.statsTitle}>Base Stats</h2>
+                       <div className={styles.statsList}>
+                           {pokemon.stats.map(({ name, value }) => (
+                               <div key={name} className={styles.statItem}>
+                                   <div className={styles.statName}>{name}</div>
+                                   <div className={styles.statValue}>{value}</div>
+                                   <div className={styles.statBar}>
+                                       <div 
+                                           className={styles.statBarFill}
+                                           style={{ width: `${Math.min(value / 1.5, 100)}%` }}
+                                       />
+                                   </div>
+                               </div>
+                           ))}
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
     );
 }
